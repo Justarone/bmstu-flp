@@ -1,0 +1,292 @@
+\chapter{Задания}
+
+\section{Составить диаграмму вычисления следующих выражений.}
+
+\begin{lstlisting}
+(equal 3 (abs -3))
+\end{lstlisting}
+\vspace{60mm}
+
+\begin{lstlisting}
+(equal (+ 1 2) 3)
+\end{lstlisting}
+\vspace{60mm}
+
+\begin{lstlisting}
+(equal (* 4 7) 21)
+\end{lstlisting}
+\vspace{60mm}
+
+\begin{lstlisting}
+(equal (* 2 3) (+ 7 2))
+\end{lstlisting}
+\vspace{60mm}
+
+\begin{lstlisting}
+(equal (- 7 3) (* 3 2))
+\end{lstlisting}
+\vspace{60mm}
+
+\begin{lstlisting}
+(equal (abs (- 2 4)) 3)
+\end{lstlisting}
+\vspace{60mm}
+
+\clearpage
+
+\section{Написать функцию, вычисляющую гипотенузу прямоугольного треугольника по заданным катетам и составить диаграмму ее вычисления.}
+
+\begin{lstlisting}
+(defun hypotenuse(a b) (sqrt (+ (* a a) (* b b))))
+\end{lstlisting}
+\vspace{80mm}
+
+\section{Написать функцию, вычисляющую объем параллелепипеда по 3-м его сторонам, и составить диаграмму ее вычисления.}
+
+\begin{lstlisting}
+(defun volume(a b h) (* a b h))
+\end{lstlisting}
+\clearpage
+
+\section{Каковы результаты вычисления следующих выражений?}
+
+\begin{lstlisting}
+(list 'a 'b c)
+\end{lstlisting}
+Результат: несвязанная переменная \texttt{c} (у переменной \texttt{c} не стоит блокирование вычисления и при попытке вычислить случается ошибка, потому что интерпретатор не может найти информацию о данном символе в \texttt{package})
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons 'a (b c))
+\end{lstlisting}
+Результат: несвязанная переменная c (конструкция \texttt{(b c)} рассматривается интерпретатором, как вычислимое выражение, для вычисления которого нужно вызвать функцию \texttt{b} с аргументом \texttt{c}, поэтому сначала интерпретатор вычисляет \texttt{c}, а у переменной \texttt{c} не стоит блокирование вычисления и при попытке вычислить случается ошибка, потому что интерпретатор не может найти информацию о данном символе в \texttt{package})
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons 'a '(b c))
+\end{lstlisting}
+Результат: \texttt{(a b c)}.
+\vspace{20mm}
+
+\begin{lstlisting}
+(caddr (1 2 3 4 5))
+\end{lstlisting}
+Результат: недопустимый вызов функции (ввиду отсутствия блокировки вычисления \texttt{(1 2 3 4 5)} рассматривается как список, на первом месте которого стоит символ, соответствующий имени функции, которую нужно вызвать с остальными элементами списка в качестве аргументов функции (\texttt{1} --- не функция))
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons 'a 'b 'c)
+\end{lstlisting}
+Результат: некорректное количество аргументов (функция \texttt{cons} ожидает 2 аргумента, а передано 3)
+\vspace{20mm}
+
+\begin{lstlisting}
+(list 'a (b c))
+\end{lstlisting}
+Результат: несвязанная переменная c (конструкция \texttt{(b c)} рассматривается интерпретатором, как вычислимое выражение, для вычисления которого нужно вызвать функцию \texttt{b} с аргументом \texttt{c}, поэтому сначала интерпретатор вычисляет \texttt{c}, а у переменной \texttt{c} не стоит блокирование вычисления и при попытке вычислить случается ошибка, потому что интерпретатор не может найти информацию о данном символе в \texttt{package})
+\vspace{20mm}
+
+\begin{lstlisting}
+(list a '(b c))
+\end{lstlisting}
+Результат: несвязанная переменная (у переменной \texttt{a} не стоит блокирование вычисления и при попытке вычислить случается ошибка, потому что интерпретатор не может найти информацию о данном символе в \texttt{package})
+\vspace{20mm}
+
+\begin{lstlisting}
+(list (+ 1 '(length '(1 2 3))))
+\end{lstlisting}
+Результат: ошибка вычисления (чистая математическая функция ожидает на вход \texttt{NUMBER}, а получена форма, вычисление которой заблокировано).
+\vspace{20mm}
+
+\section{Написать функцию \texttt{longer-then} от двух списков-аргументов, которая возвращает T, если первый аргумент имеет большую длину.}
+
+\begin{lstlisting}
+(defun longer_then(l1 l2) (> (length l1) (length l2)))
+\end{lstlisting}
+
+\section{Каковы результаты вычисления следующих выражений}
+
+\begin{lstlisting}
+(cons 3 (list 5 6))
+\end{lstlisting}
+Результат: \texttt{(3 5 6)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(list 3 'from 9 'gives (- 9 3))
+\end{lstlisting}
+Результат: \texttt{(3 from 9 gives 6)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(+ (length '(1 foo 2 too)) (car '(21 22 23)))
+\end{lstlisting}
+Результат: 25 (4 + 21)
+\vspace{20mm}
+
+\begin{lstlisting}
+(cdr '(cons is short for ans))
+\end{lstlisting}
+Результат: \texttt{(is short for ans)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(car (list one two))
+\end{lstlisting}
+Результат: несвязанная переменная \texttt{one} (у переменной \texttt{one} не стоит блокирование вычисления и при попытке вычислить случается ошибка, потому что интерпретатор не может найти информацию о данном символе в \texttt{package})
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons 3 '(list 5 6))
+\end{lstlisting}
+Результат: \texttt{(3 list 5 6)}
+\vspace{20mm}
+
+
+\begin{lstlisting}
+(car (list 'one 'two))
+\end{lstlisting}
+Результат: \texttt{one}
+\vspace{20mm}
+
+\section{Дана функция mystery, найти результаты выражений.}
+
+Функция:
+\begin{lstlisting}
+(defun mystery (x) (list (second x) (first x)))
+\end{lstlisting}
+
+Выражения:
+
+\begin{lstlisting}
+(mystery '(one two))
+\end{lstlisting}
+Результат: \texttt{(two one)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(mystery 'free)
+\end{lstlisting}
+Результат: функция \texttt{second} применима только к значениям типа \texttt{list}, а \texttt{free} -- не \texttt{list}.
+\vspace{20mm}
+
+\begin{lstlisting}
+(mystery (last 'one 'two))
+\end{lstlisting}
+Результат: ошибка: \texttt{one} -- не \texttt{list} (а функция \texttt{принимает один аргумент типа \texttt{list}})
+\vspace{20mm}
+
+\begin{lstlisting}
+(mystery 'one 'two)
+\end{lstlisting}
+Результат: ошибка: неверное количество аргументов.
+\vspace{20mm}
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Базис}
+
+Базис состоит из:
+\begin{enumerate}
+    \item структуры, атомы;
+    \item встроенные (примитивные) функции (\texttt{atom}, \texttt{eq}, \texttt{cons}, \texttt{car}, \texttt{cdr});
+    \item специальные функции, управляющие обработкой структур, представляющих вычислимые выражения (\texttt{quote}, \texttt{cond}, \texttt{lambda}, \texttt{label}, \texttt{eval}).
+\end{enumerate}
+
+Таким образом, функции, входящие в базис:
+\begin{itemize}
+    \item \texttt{atom} --- функция определения, является ли объект атомом (возвращает \texttt{T}, если да, иначе -- \texttt{Nil});
+    \item \texttt{eq} --- функция проверки атомов на равенство (возвращает \texttt{T}, если равны, иначе -- \texttt{Nil})
+    \item \texttt{cons} --- функция создания точечной пары;
+    \item \texttt{car} --- функция получения первого элемента точечной пары;
+    \item \texttt{cdr} --- функция получения второго элемента точечной пары;
+    \item \texttt{cond} --- функция, позволяющая организовать ветвление (чаще всего используется в частичных функциях и имеет вид: \texttt{(cond (p1 e1) (p2 e2) ... (pn en))}, где \texttt{pi} -- предикат, а \texttt{ei} -- форма, соответствующая предикату \texttt{ei})
+    \item \texttt{quote} --- функция блокировки вычислений, аргумент не вычисляется;
+    \item \texttt{eval} --- функция-интерпретатор, противоположность функции \texttt{quote}, пытается вычислить аргумент;
+    \item \texttt{lambda};
+    \item \texttt{label}.
+\end{itemize}
+
+\section{Классификация функций}
+
+Функции в Lisp классифицируют следующим образом:
+
+\begin{itemize}
+    \item чистые математические функции;
+    \item рекурсивные функции;
+    \item специальные функции --- формы (сегодня 2 аргумента, завтра - 5);
+    \item псевдофункции (создают эффект на внешнем устройстве);
+    \item функции с вариативными значениями, из которых выбирается 1;
+    \item функции высших порядков --- функционал: используется для синтаксического управления программ (абстракция языка).
+\end{itemize}
+
+По назначению функции разделяются следующим образом:
+
+\begin{enumerate}
+    \item конструкторы --- создают значение (\texttt{cons}, например);
+    \item селекторы --- получают доступ по адресу (\texttt{car}, \texttt{cdr});
+    \item предикаты --- возвращают \texttt{Nil}, \texttt{T}.
+\end{enumerate}
+
+\section{Список, представление и интерпретация списков}
+
+Список --- частный случай S-выражения, структура данных, может быть пустым или непустым, непустой список содержит голову (в случае Lisp хранящую произвольное S-выражение) и хвост, который также должен является списком.
+
+Непустой список в Lisp представлен списковой ячейкой, точечная пара, первый элемент которой - произвольное S-выражение, второй - список; пустой - \texttt{Nil}.
+
+\texttt{Список ::= <пустой список> | <непустой список>}, где 
+
+\texttt{<пустой список> ::= () | Nil},
+
+\texttt{<непустой список> ::= (<S-выражение>. <список>)},
+
+В оперативной памяти списковая ячейка представляется бинарным узлом: 2 указателя, один из которых на голову списка, второй - на хвост.
+
+
+\section{Функции \texttt{car} и \texttt{cdr}}
+
+\texttt{car} --- функция получения первого элемента точечной пары.
+
+Примеры:
+
+\begin{center}
+    \begin{tabular}{ |c|c|c| } 
+        \hline
+            S-выражение & Результат выполнения \texttt{car} \\ 
+        \hline
+        \hline
+            (A . B) & A \\ 
+        \hline
+            ((A . B) . C) & (A . B) \\ 
+        \hline
+            A & ошибка \\ 
+        \hline
+    \end{tabular}
+\end{center}
+
+
+\texttt{cdr} --- функция получения второго элемента точечной пары.
+
+\begin{center}
+    \begin{tabular}{ |c|c|c| } 
+        \hline
+            S-выражение & Результат выполнения \texttt{cdr} \\ 
+        \hline
+        \hline
+            (A . B) & B \\ 
+        \hline
+            (A . (B . C)) & (B . C) \\ 
+        \hline
+            A & ошибка \\ 
+        \hline
+    \end{tabular}
+\end{center}
+
+
+\section{Назначение и отличие \texttt{list} от \texttt{cons}}
+
+\texttt{cons} --- функция конструирования точечной пары, на вход получает 2 значения и делает из них точечную пару.
+
+\texttt{list} --- функция конструирования списка. На вход получает произвольное количество элементов и делает из них список.
+
+Вызовы \texttt{(list 1 2 3 4)} и \texttt{(cons 1 (cons 2 (cons 3 (cons 4 Nil))))} эквивалентны, то есть дают одинаковый результат.

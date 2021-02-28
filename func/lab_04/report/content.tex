@@ -1,0 +1,82 @@
+\chapter{Задания}
+
+\section{Написать функцию, которая переводи температуру в системе Фаренгейта в температуру в системе по Цельсию \texttt{(defun f-to-c (temp) ... )}}
+
+\begin{lstlisting}
+(defun f-to-c (temp) 
+  (* (/ 5 9) (- temp 32.0)))
+\end{lstlisting}
+
+\section{Что получится при вычислении каждого из выражений}
+
+\begin{lstlisting}
+(list 'cons T Nil)
+\end{lstlisting}
+Результат: \texttt{(cons T Nil)}
+
+\begin{lstlisting}
+(eval (eval (list 'cons T Nil)))
+\end{lstlisting}
+Результат: ошибка: после применения внутреннего \texttt{eval} вычисленное значение будет \texttt{(T)}. Затем попытка применить \texttt{eval} к полученному заканчивается ошибкой.
+
+\begin{lstlisting}
+(apply #'cons '(T Nil))
+\end{lstlisting}
+Результат: \texttt{(T)}
+
+\begin{lstlisting}
+(eval (list 'cons T Nil))
+\end{lstlisting}
+Результат: \texttt{(T)}
+
+\begin{lstlisting}
+(list 'eval Nil)
+\end{lstlisting}
+Результат: \texttt{(eval Nil)}
+
+\begin{lstlisting}
+(eval Nil)
+\end{lstlisting}
+Результат: \texttt{Nil}
+
+\begin{lstlisting}
+(eval (list 'eval Nil))
+\end{lstlisting}
+Результат: \texttt{Nil}
+
+\clearpage
+
+\section{Написать функцию, вычисляющую катет по заданной гипотенузе и другому катету прямоугольного треугольника, и составить диаграмму ее вычисления.}
+
+\begin{lstlisting}
+(defun leg (h l)
+  (sqrt (- (* h h) (* l l))))
+\end{lstlisting}
+
+\vspace{60mm}
+
+\section{Написать функцию, вычисляющую площадь трапеции по ее основаниям и высоте, и составить диаграмму ее вычисления.}
+
+\begin{lstlisting}
+(defun area (a b h) 
+  (* (/ (+ a b) 2) h))
+\end{lstlisting}
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Синтаксическая форма и хранение программы в памяти}
+
+FIXME
+
+\section{Трактовка элементов списка}
+
+FIXME (здесь надо написать, что первый аргумент --- имя функции, остальные --- аргументы этой функции)
+
+\section{Порядок реализации программы}
+
+FIXME
+
+\section{Способы определения функций}
+
+FIXME
+

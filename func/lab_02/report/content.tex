@@ -1,0 +1,294 @@
+\chapter{Задания}
+
+\section{Используя только функции \texttt{CAR} и \texttt{CDR}, написать выражения, возвращающие: (№2)}
+
+\subsection{Второй элемент}
+
+\begin{lstlisting}
+(car (cdr '(1 2 3 4)))
+\end{lstlisting}
+
+\subsection{Третий элемент}
+
+\begin{lstlisting}
+(car (cdr (cdr '(1 2 3 4))))
+\end{lstlisting}
+
+\subsection{Четвертый элемент}
+
+\begin{lstlisting}
+(car (cdr (cdr (cdr '(1 2 3 4)))))
+\end{lstlisting}
+
+\section{Что будет в результате вычисления выражений? (№3)}
+
+\begin{lstlisting}
+(CAADR '((blue cube) (red pyramid)))
+\end{lstlisting}
+Результат: \texttt{red}.
+\vspace{20mm}
+
+\begin{lstlisting}
+(CDAR '((abc) (def) (ghi)))
+\end{lstlisting}
+Результат: \texttt{Nil}
+\vspace{20mm}
+
+\begin{lstlisting}
+(CADR '((abc) (def) (ghi)))
+\end{lstlisting}
+Результат: \texttt{(def)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(CADDR '((abc) (def) (ghi)))
+\end{lstlisting}
+Результат: \texttt{(ghi)}
+
+\section{Что будет в результате вычисления выражений? (№4)}
+
+\begin{lstlisting}
+(list 'Fred 'and Wilma)
+\end{lstlisting}
+Результат: ошибка (несвязная переменная)
+\vspace{20mm}
+
+\begin{lstlisting}
+(list 'Fred '(and Wilma))
+\end{lstlisting}
+Результат: \texttt{(Fred (and Wilma))}
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons Nil Nil)
+\end{lstlisting}
+Результат: \texttt{(Nil)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons T Nil)
+\end{lstlisting}
+Результат: \texttt{(T)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons Nil T)
+\end{lstlisting}
+Результат: \texttt{(Nil . T)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(list Nil)
+\end{lstlisting}
+Результат: \texttt{(Nil)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(list Nil)
+\end{lstlisting}
+Результат: \texttt{(Nil)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons (T) Nil)
+\end{lstlisting}
+Результат: ошибка (функция T не определена)
+\vspace{20mm}
+
+\begin{lstlisting}
+(list '(one two) '(free temp))
+\end{lstlisting}
+Результат: \texttt{((one two) (free temp))}
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons 'Fred '(and Wilma))
+\end{lstlisting}
+Результат: \texttt{(Fred and Wilma)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons 'Fred '(Wilma))
+\end{lstlisting}
+Результат: \texttt{(Fred Wilma)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(list Nil Nil)
+\end{lstlisting}
+Результат: \texttt{(Nil Nil)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(list T Nil)
+\end{lstlisting}
+Результат: \texttt{(T Nil)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(list Nil T)
+\end{lstlisting}
+Результат: \texttt{(Nil T)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons T (list Nil))
+\end{lstlisting}
+Результат: \texttt{(T Nil)}
+\vspace{20mm}
+
+\begin{lstlisting}
+(list (T) Nil)
+\end{lstlisting}
+Результат: ошибка (функция T не определена)
+\vspace{20mm}
+
+\begin{lstlisting}
+(cons '(one two) '(free temp))
+\end{lstlisting}
+Результат: \texttt{((one two) free temp)}
+\vspace{20mm}
+
+\section{Написать функцию, возвращающую список... (№5)}
+
+Функция \texttt{(f ar1 ar2 ar3 ar4)}, возвращающая \texttt{((ar1 ar2) (ar3 ar4))}:
+
+С помощью функции \texttt{list}:
+\begin{lstlisting}
+(defun fl1(ar1 ar2 ar3 ar4) (list (list ar1 ar2) (list ar3 ar4)))
+\end{lstlisting}
+
+С помощью функции \texttt{cons}:
+\begin{lstlisting}
+(defun fc1(ar1 ar2 ar3 ar4) (cons 
+(cons ar1 (cons ar2 Nil)) 
+(cons 
+(cons ar3 (cons ar4 Nil)
+) Nil)
+))
+\end{lstlisting}
+\vspace{20mm}
+
+Функция \texttt{(f ar1 ar2)}, возвращающая \texttt{((ar1) (ar2))}:
+
+С помощью функции \texttt{list}:
+\begin{lstlisting}
+(defun fl2(ar1 ar2) (list (list ar1) (list ar2)))
+\end{lstlisting}
+
+С помощью функции \texttt{cons}:
+\begin{lstlisting}
+(defun fc2(ar1 ar2) (cons
+(cons ar1 Nil)
+(cons (cons ar2 Nil) Nil)
+))
+\end{lstlisting}
+\vspace{20mm}
+
+Функция \texttt{(f ar1)}, возвращающая \texttt{(ar1)}:
+
+С помощью функции \texttt{list}:
+\begin{lstlisting}
+(defun fl3(ar1) (list (list (list ar1))))
+\end{lstlisting}
+
+С помощью функции \texttt{cons}:
+\begin{lstlisting}
+(defun fc3(ar1) (cons (cons (cons ar1 Nil) Nil) Nil))
+\end{lstlisting}
+
+Результаты в виде списочных ячеек приложены к отчету на отдельном листе.
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Классификация функций}
+
+Функции в Lisp классифицируют следующим образом:
+
+\begin{itemize}
+    \item чистые математические функции;
+    \item рекурсивные функции;
+    \item специальные функции --- формы (сегодня 2 аргумента, завтра - 5);
+    \item псевдофункции (создают эффект на внешнем устройстве);
+    \item функции с вариативными значениями, из которых выбирается 1;
+    \item функции высших порядков --- функционал: используется для синтаксического управления программ (абстракция языка).
+\end{itemize}
+
+По назначению функции разделяются следующим образом:
+
+\begin{enumerate}
+    \item конструкторы --- создают значение (\texttt{cons}, например);
+    \item селекторы --- получают доступ по адресу (\texttt{car}, \texttt{cdr});
+    \item предикаты --- возвращают \texttt{Nil}, \texttt{T}.
+\end{enumerate}
+
+\section{Базис}
+
+Базис состоит из:
+\begin{enumerate}
+    \item структуры, атомы;
+    \item встроенные (примитивные) функции (\texttt{atom}, \texttt{eq}, \texttt{cons}, \texttt{car}, \texttt{cdr});
+    \item специальные функции, управляющие обработкой структур, представляющих вычислимые выражения (\texttt{quote}, \texttt{cond}, \texttt{lambda}, \texttt{label}, \texttt{eval}).
+\end{enumerate}
+
+Таким образом, функции, входящие в базис:
+\begin{itemize}
+    \item \texttt{atom} --- функция определения, является ли объект атомом (возвращает \texttt{T}, если да, иначе -- \texttt{Nil});
+    \item \texttt{eq} --- функция проверки атомов на равенство (возвращает \texttt{T}, если равны, иначе -- \texttt{Nil})
+    \item \texttt{cons} --- функция создания точечной пары;
+    \item \texttt{car} --- функция получения первого элемента точечной пары;
+    \item \texttt{cdr} --- функция получения второго элемента точечной пары;
+    \item \texttt{cond} --- функция, позволяющая организовать ветвление (чаще всего используется в частичных функциях и имеет вид: \texttt{(cond (p1 e1) (p2 e2) ... (pn en))}, где \texttt{pi} -- предикат, а \texttt{ei} -- форма, соответствующая предикату \texttt{ei})
+    \item \texttt{quote} --- функция блокировки вычислений, аргумент не вычисляется;
+    \item \texttt{eval} --- функция-интерпретатор, противоположность функции \texttt{quote}, пытается вычислить аргумент;
+    \item \texttt{lambda};
+    \item \texttt{label}.
+\end{itemize}
+
+\section{Как выполняются \texttt{car}/\texttt{cdr}, какие результаты вернут (примеры)}
+
+\texttt{car} --- функция получения первого элемента точечной пары.
+
+Примеры:
+
+\begin{center}
+    \begin{tabular}{ |c|c|c| } 
+        \hline
+            S-выражение & Результат выполнения \texttt{car} \\ 
+        \hline
+        \hline
+            (A . B) & A \\ 
+        \hline
+            ((A . B) . C) & (A . B) \\ 
+        \hline
+            A & ошибка \\ 
+        \hline
+    \end{tabular}
+\end{center}
+
+
+\texttt{cdr} --- функция получения второго элемента точечной пары.
+
+\begin{center}
+    \begin{tabular}{ |c|c|c| } 
+        \hline
+            S-выражение & Результат выполнения \texttt{cdr} \\ 
+        \hline
+        \hline
+            (A . B) & B \\ 
+        \hline
+            (A . (B . C)) & (B . C) \\ 
+        \hline
+            A & ошибка \\ 
+        \hline
+    \end{tabular}
+\end{center}
+
+
+\section{Отличие \texttt{list} от \texttt{cons}}
+
+\texttt{cons} --- функция конструирования точечной пары, на вход получает 2 значения и делает из них точечную пару.
+
+\texttt{list} --- функция конструирования списка. На вход получает произвольное количество элементов и делает из них список.
+
+Вызовы \texttt{(list 1 2 3 4)} и \texttt{(cons 1 (cons 2 (cons 3 (cons 4 Nil))))} эквивалентны, то есть дают одинаковый результат.
