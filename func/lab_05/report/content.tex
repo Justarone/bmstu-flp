@@ -161,8 +161,123 @@
 
 \section{Работа функций \texttt{and}, \texttt{or}, \texttt{if}, \texttt{cond}}
 
-FIXME
+\subsection{Функция \texttt{and}}
+
+Синтаксис:
+\begin{lstlisting}
+(and выражение-1 выражение-2 ... выражение-n)
+\end{lstlisting}
+
+Функция возвращает первое выражение, результат вычисления которого = \texttt{Nil}. Если все не \texttt{Nil}, то возвращается результат вычисления последнего выражения.
+
+Примеры:
+
+\begin{lstlisting}
+(and 1 Nil 2)
+\end{lstlisting}
+Результат: \texttt{Nil}
+
+\begin{lstlisting}
+(and 1 2 3)
+\end{lstlisting}
+Результат: 3
+
+\subsection{Функция \texttt{or}}
+
+Синтаксис:
+\begin{lstlisting}
+(or выражение-1 выражение-2 ... выражение-n)
+\end{lstlisting}
+
+Функция возвращает первое выражение, результат вычисления которого не \texttt{Nil}. Если все \texttt{Nil}, то возвращается \texttt{Nil}.
+
+Примеры:
+
+\begin{lstlisting}
+(or Nil Nil 2)
+\end{lstlisting}
+Результат: 2
+
+\begin{lstlisting}
+(or 1 2 3)
+\end{lstlisting}
+Результат: 1
+
+\subsection{Функция \texttt{if}}
+
+Синтаксис:
+\begin{lstlisting}
+(if предикат t-выражение f-выражение)
+\end{lstlisting}
+
+Если вычисленный предикат не \texttt{Nil}, то выполняется \texttt{t-выражение}, иначе - \texttt{f-выражение}.
+
+Примеры:
+
+\begin{lstlisting}
+(if Nil 2 3)
+\end{lstlisting}
+Результат: 3
+
+\begin{lstlisting}
+(if 0 2 3)
+\end{lstlisting}
+Результат: 2
+
+\subsection{Функция \texttt{cond}}
+
+Синтаксис:
+\begin{lstlisting}
+(cond 
+  (предикат-1 выражение-1)
+  (предикат-2 выражение-2)
+  ...
+  (предикат-n выражение-n))
+\end{lstlisting}
+
+По порядку вычисляются и проверяются на равенство с \texttt{Nil} предикаты. Для первого предиката, который не равен \texttt{Nil}, вычисляется находящееся с ним в списке выражение и возвращается его значение. Если все предкаты вернут \texttt{Nil}, то и \texttt{cond} вернет \texttt{Nil}.
+
+Примеры:
+
+\begin{lstlisting}
+(cond (Nil 1) (2 3))
+\end{lstlisting}
+Результат: 3
+
+\begin{lstlisting}
+(cond (Nil 1) (Nil 2))
+\end{lstlisting}
+Результат: \texttt{Nil}
 
 \section{Способы определения функций}
 
-FIXME (см. лр 4)
+\subsection{Через \texttt{defun}}
+
+Синтаксис:
+\begin{lstlisting}
+(defun имя-функции (список-аргументов) тело-функции)
+\end{lstlisting}
+
+Пример определения:
+\begin{lstlisting}
+(defun sqr(x) (* x x))
+\end{lstlisting}
+
+Пример вызова:
+\begin{lstlisting}
+(sqr 2)
+\end{lstlisting}
+Результат: 4
+
+\subsection{Через \texttt{lambda}}
+
+Синтаксис:
+\begin{lstlisting}
+(lambda (список-аргументов) тело-функции)
+\end{lstlisting}
+
+Пример использования:
+\begin{lstlisting}
+((lambda (x) (* x x)) 2)
+\end{lstlisting}
+Результат: 4

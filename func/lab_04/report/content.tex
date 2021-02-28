@@ -70,7 +70,7 @@ FIXME
 
 \section{Трактовка элементов списка}
 
-FIXME (здесь надо написать, что первый аргумент --- имя функции, остальные --- аргументы этой функции)
+Первый аргумент списка, который поступает на вход интерпретатору, трактуется как имя функции, остальные --- как аргументы этой функции.
 
 \section{Порядок реализации программы}
 
@@ -78,5 +78,33 @@ FIXME
 
 \section{Способы определения функций}
 
-FIXME
+\subsection{Через \texttt{defun}}
 
+Синтаксис:
+\begin{lstlisting}
+(defun имя-функции (список-аргументов) тело-функции)
+\end{lstlisting}
+
+Пример определения:
+\begin{lstlisting}
+(defun sqr(x) (* x x))
+\end{lstlisting}
+
+Пример вызова:
+\begin{lstlisting}
+(sqr 2)
+\end{lstlisting}
+Результат: 4
+
+\subsection{Через \texttt{lambda}}
+
+Синтаксис:
+\begin{lstlisting}
+(lambda (список-аргументов) тело-функции)
+\end{lstlisting}
+
+Пример использования:
+\begin{lstlisting}
+((lambda (x) (* x x)) 2)
+\end{lstlisting}
+Результат: 4
