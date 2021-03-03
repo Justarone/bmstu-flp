@@ -165,10 +165,10 @@
 
 Синтаксис:
 \begin{lstlisting}
-(and выражение-1 выражение-2 ... выражение-n)
+(and expression-1 expression-2 ... expression-n)
 \end{lstlisting}
 
-Функция возвращает первое выражение, результат вычисления которого = \texttt{Nil}. Если все не \texttt{Nil}, то возвращается результат вычисления последнего выражения.
+Функция возвращает первое expression, результат вычисления которого = \texttt{Nil}. Если все не \texttt{Nil}, то возвращается результат вычисления последнего выражения.
 
 Примеры:
 
@@ -186,10 +186,10 @@
 
 Синтаксис:
 \begin{lstlisting}
-(or выражение-1 выражение-2 ... выражение-n)
+(or expression-1 expression-2 ... expression-n)
 \end{lstlisting}
 
-Функция возвращает первое выражение, результат вычисления которого не \texttt{Nil}. Если все \texttt{Nil}, то возвращается \texttt{Nil}.
+Функция возвращает первое expression, результат вычисления которого не \texttt{Nil}. Если все \texttt{Nil}, то возвращается \texttt{Nil}.
 
 Примеры:
 
@@ -207,10 +207,10 @@
 
 Синтаксис:
 \begin{lstlisting}
-(if предикат t-выражение f-выражение)
+(if condition t-expression f-expression)
 \end{lstlisting}
 
-Если вычисленный предикат не \texttt{Nil}, то выполняется \texttt{t-выражение}, иначе - \texttt{f-выражение}.
+Если вычисленный предикат не \texttt{Nil}, то выполняется \texttt{t-expression}, иначе - \texttt{f-expression}.
 
 Примеры:
 
@@ -229,10 +229,10 @@
 Синтаксис:
 \begin{lstlisting}
 (cond 
-  (предикат-1 выражение-1)
-  (предикат-2 выражение-2)
+  (condition-1 expression-1)
+  (condition-2 expression-2)
   ...
-  (предикат-n выражение-n))
+  (condition-n expression-n))
 \end{lstlisting}
 
 По порядку вычисляются и проверяются на равенство с \texttt{Nil} предикаты. Для первого предиката, который не равен \texttt{Nil}, вычисляется находящееся с ним в списке выражение и возвращается его значение. Если все предкаты вернут \texttt{Nil}, то и \texttt{cond} вернет \texttt{Nil}.
@@ -255,7 +255,7 @@
 
 Синтаксис:
 \begin{lstlisting}
-(defun имя-функции (список-аргументов) тело-функции)
+(defun func-name (list-of-argument) function-body)
 \end{lstlisting}
 
 Пример определения:
@@ -273,7 +273,7 @@
 
 Синтаксис:
 \begin{lstlisting}
-(lambda (список-аргументов) тело-функции)
+(lambda (list-of-arguments) function-body)
 \end{lstlisting}
 
 Пример использования:

@@ -57,3 +57,8 @@ dkms.conf
 *.EXE
 *.OBJ
 *.MAP
+
+# LATEX:
+*.toc
+*.aux
+*.log

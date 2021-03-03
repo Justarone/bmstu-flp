@@ -38,7 +38,7 @@
 \usepackage{graphicx}
 \newcommand{\img}[3] {
     \begin{figure}[h]
-        \center{\includegraphics[height=#1]{assets/img/#2}}
+        \center{\includegraphics[height=#1]{#2}}
         \caption{#3}
         \label{img:#2}
     \end{figure}
@@ -46,7 +46,7 @@
 
 \newcommand{\imgw}[3] {
     \begin{figure}[h]
-        \center{\includegraphics[width=#1]{assets/img/#2}}
+        \center{\includegraphics[width=#1]{#2}}
         \caption{#3}
         \label{img:#2}
     \end{figure}
