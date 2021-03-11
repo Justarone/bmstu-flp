@@ -1,0 +1,243 @@
+\chapter{Задания}
+
+\section{Чем принципиально отличаются функции \texttt{cons}, \texttt{list}, \texttt{append}? Пусть...}
+
+\textbf{Продолжение задания:} 
+
+Пусть
+\begin{lstlisting}
+(setf lst1 '(a b))
+(setf lst2 '(c d))
+\end{lstlisting}
+
+Каковы результаты следующих выражений?
+
+\noindent\rule{12cm}{0.4pt}
+
+\begin{lstlisting}
+(cons lst1 lst2)
+\end{lstlisting}
+Результат: \texttt{((A B) C D)}
+
+\begin{lstlisting}
+(list lst1 lst2)
+\end{lstlisting}
+Результат: \texttt{((A B) (C D))}
+
+\begin{lstlisting}
+(append lst1 lst2)
+\end{lstlisting}
+Результат: \texttt{(A B C D)}
+
+\section{Каковы результаты следующих выражений?}
+
+\begin{lstlisting}
+(reverse ())
+\end{lstlisting}
+Результат: \texttt{Nil}
+
+\begin{lstlisting}
+(last ())
+\end{lstlisting}
+Результат: \texttt{Nil}
+
+\begin{lstlisting}
+(reverse '(a))
+\end{lstlisting}
+Результат: \texttt{(a)}
+
+\begin{lstlisting}
+(last '(a))
+\end{lstlisting}
+Результат: \texttt{(a)}
+
+\begin{lstlisting}
+(reverse '((a b c)))
+\end{lstlisting}
+Результат: \texttt{((a b c))}
+
+\begin{lstlisting}
+(last '((a b c)))
+\end{lstlisting}
+Результат: \texttt{((a b c))}
+
+
+\section{Написать, по крайней мере, два варианта функции, которая возвращает последний элемент своего списка-аргумента}
+
+\subsection{Рекурсия 1}
+
+\begin{lstlisting}
+(defun my-last-recursive-internal (lst)
+  (if (cdr lst) 
+   (my-last-recursive-internal (cdr lst))
+   (car lst)))
+(defun my-last-recursive (lst)
+  (and lst (my-last-recursive-internal lst)))
+\end{lstlisting}
+
+\subsection{Рекурсия 2}
+
+\begin{lstlisting}
+(defun my-last-recursive-internal-2 (lst last-el)
+  (if (eql nil lst) last-el (my-last-recursive-internal-2 (cdr lst) (car lst))))
+(defun my-last-recursive-2 (lst)
+  (my-last-recursive-internal-2 lst nil))
+\end{lstlisting}
+
+\subsection{С помощью \texttt{reduce}}
+
+\begin{lstlisting}
+(defun my-last-reduce (lst)
+  (reduce #'(lambda (acc el) el) lst))
+\end{lstlisting}
+
+\section{Написать, по крайней мере, два варианта функции, которая возвращает свой список-аргумент без последнего элемента}
+
+\subsection{Рекурсия}
+
+\begin{lstlisting}
+(defun no-last-internal (lst acc)
+  (if (cdr lst)
+   (no-last-internal (cdr lst) (cons (car lst) acc))
+   (nreverse acc)))
+(defun no-last (lst)
+  (and lst (no-last-internal lst nil)))
+\end{lstlisting}
+
+\subsection{Функции ядра}
+
+\begin{lstlisting}
+(defun no-last-kern (lst)
+  (and lst (nreverse (cdr (reverse lst)))))
+\end{lstlisting}
+
+
+\section{Написать простой вариант игры в кости, в котором...}
+
+\textbf{Продолжение задания:}
+
+в котором бросаются две правильные кости. Если сумма выпавших очков равна 7 или 11 --- выигрыш, если выпало $(1, 1)$ или $(6, 6)$ --- игрок получает право снова бросить кости, во всех остальных случаях ход переходит ко второму игроку, но запоминается сумма выпавших очков. Если второй игрок не выигрывает абсолютно, то выигрывает тот игрок, у которого больше очков. Результат игры и значения выпавших костей выводить на экран с помощью функции \texttt{print}.
+
+\noindent\rule{12cm}{0.4pt}
+
+\begin{lstinputlisting}[
+        caption={Игра в кости},
+        style={mystyle},
+    ]{../dices.lisp}
+\end{lstinputlisting}
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Структуроразрушающие и не разрушающие структуру списка функции}
+
+\subsection{Не разрушающие структуру списка функции}
+
+Данные функции не меняют сам объект-аргумент, а создают копию.
+
+\subsubsection{Функция \texttt{append}}
+
+Объединяет списки. Это форма, можно передать больше 2 аргументов. Создает копию для всех аргументов, кроме последнего.
+
+Пример: \texttt{(append '(1 2) '(3 4))} --- \texttt{(1 2 3 4)}.
+
+\subsubsection{Функция \texttt{reverse}}
+
+Возвращает копию исходного списка, элементы которого переставлены в обратном порядке. \textbf{В целях эффективности работает только на верхнем уровне}.
+
+Пример: \texttt{(reverse '(1 2 3 4))} --- \texttt{(4 3 2 1)}.
+
+\subsubsection{Функция \texttt{last}}
+
+Проход по верхнему уровню и возврат последней списковой ячейки.
+
+Пример: \texttt{(last '(1 2 3 4))} --- \texttt{(4)}.
+
+\subsubsection{Функция \texttt{nth}}
+
+Возврат указателя от n-ной списковой ячейки, нумерация с нуля.
+
+Пример: \texttt{(nth 1 '(1 2 3 4))} --- \texttt{2}.
+
+\subsubsection{Функция \texttt{nthcdr}}
+
+Возврат n-ого хвоста.
+
+Пример: \texttt{(nthcdr 1 '(1 2 3 4))} --- \texttt{(2 3 4)}.
+
+\subsubsection{Функция \texttt{length}}
+
+Возврат длины списка (\textbf{только по верхнему уровню}).
+
+Пример: \texttt{(length '(1 2 (3 4)))} --- \texttt{3}.
+
+\subsubsection{Функция \texttt{remove}}
+
+Модифицирует, но работает с копией, поэтому не разрушает. Данная функция удаляет элемент по значению (Часто разрушающая аналогичная функция называется \texttt{delete}). По умолчанию используется \texttt{eql} для сравнения на равенство, но можно передать другую функцию через ключевой параметр \texttt{:test}.
+
+Примеры: 
+\begin{enumerate}
+    \item \texttt{(remove 3 '(1 2 3))} --- \texttt{(1 2)};
+    \item \texttt{(remove '(1 2) '((1 2) (3 4)))} --- \texttt{((1 2) (3 4))};
+    \item \texttt{(remove '(1 2) '((1 2) (3 4)) :test #'equal)} --- \texttt{((3 4))};
+\end{enumerate}
+
+\subsubsection{Функция \texttt{rplaca}}
+
+Переставляет \texttt{car}-указатель на 2 элемент-аргумент (\textit{S}-выражение).
+
+Пример: \texttt{(rplaca '(1 2 3) 3)} --- \texttt{(3 2 3)}.
+
+\subsubsection{Функция \texttt{rplacd}}
+
+Переставляет \texttt{cdr}-указатель на 2 элемент-аргумент (\textit{S}-выражение).
+
+Пример: \texttt{(rplacd '(1 2 3) '(4 5))} --- \texttt{(1 4 5)}.
+
+\subsubsection{Функция \texttt{subst}}
+
+Заменяет все элементы списка, которые равны 2 переданному элементу-аргументу на другой 1 элемент-аргумент. \textit{По умолчанию для сравнения используется функция \texttt{eql}}.
+
+Пример: \texttt{(subst 2 1 '(1 2 1 3))} --- \texttt{(2 2 2 3)}.
+
+\subsection{Структуроразрушающие функции}
+
+Данные функции меняют сам объект-аргумент, невозможно вернуться к исходному списку. Чаще всего такие функции начинаются с префикса \texttt{n-}.
+
+\subsubsection{Функция \texttt{nconc}}
+
+Работает аналогично \texttt{append}, только не копирует свои аргументы, а разрушает структуру.
+
+\subsubsection{Функция \texttt{nreverse}}
+
+Работает аналогично \texttt{reverse}, но не создает копии.
+
+\subsubsection{Функция \texttt{nsubst}}
+
+Работае аналогично функции \texttt{nsubst}, но не создает копии.
+
+\section{Отличие в работе функций \texttt{cons}, \texttt{list}, \texttt{append} и в их результате}
+
+Функция \texttt{cons} --- чисто математическая, конструирует списковую ячейку, которая может вовсе и не быть списком (будет списком только в том случае, если 2 аргументом передан список).
+
+Примеры:
+\begin{enumerate}
+    \item \texttt{(cons 2 '(1 2))} --- \texttt{(2 1 2)} --- список;
+    \item \texttt{(cons 2 3)} --- \texttt{(2 . 3)} --- не список.
+\end{enumerate}
+
+Функция \texttt{list} --- форма, принимает произвольное количество аргументов и конструирует из них список. Результат --- всегда список. При нуле аргументов возвращает пустой список.
+
+Примеры:
+\begin{enumerate}
+    \item \texttt{(list 1 2 3)} --- \texttt{(1 2 3)};
+    \item \texttt{(list 2 '(1 2))} --- \texttt{(2 (1 2))};
+    \item \texttt{(list '(1 2) '(3 4))} --- \texttt{((1 2) (3 4))};
+\end{enumerate}
+
+Функция \texttt{append} --- форма, принимает на вход произвольное количество аргументов и для всех аргументов, кроме последнего, создает копию, ссылая при этом последний элемент каждого списка-аргумента на первый элемент следующего по порядку списка-аргумента (так как модифицируются все списки-аргументы, кроме последнего, копирование для последнего не делается в целях эффективности).
+
+Примеры:
+\begin{enumerate}
+    \item \texttt{(append '(1 2) '(3 4))} --- \texttt{(1 2 3 4)};
+    \item \texttt{(append '((1 2) (3 4)) '(5 6))} --- \texttt{((1 2) (3 4) 5 6)}.
+\end{enumerate}
