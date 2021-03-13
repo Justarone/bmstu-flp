@@ -1,0 +1,106 @@
+\chapter{Задания}
+
+\section{Написать функцию, которая по своему аргументу-списку \texttt{lst} определяет, является ли он полиндромом (то есть равны ли \texttt{lst} и \texttt{(reverse lst)})}
+
+\begin{lstlisting}
+(defun polyndromp (lst)
+  (equal lst (reverse lst)))
+\end{lstlisting}
+
+\section{Написать предикат \texttt{set-equal}, который возвращает \texttt{t}, если два его множества-аргумента содержат одни и те же элементы, порядок которых не имеет значения}
+
+\begin{lstlisting}
+(defun set-equal (lst1 lst2) 
+  (and (subsetp lst2 lst1) (subsetp lst1 lst2)))
+\end{lstlisting}
+
+\section{Напишите необходимые функции, которые обрабатывают таблицу из точечных пар: \texttt{(страна . столица)}, и возвращают по стране столицу, а по столице --- страну}
+
+\begin{lstlisting}
+(defun get-cptl (cntry cntry-cptl)
+  (let ((pair (assoc cntry cntry-cptl)))
+    (and pair (cdr pair))))
+
+(defun get-cntry (cptl cntry-cptl)
+  (let ((pair (rassoc cptl cntry-cptl)))
+    (and pair (car pair))))
+\end{lstlisting}
+
+\section{Напишите функцию \texttt{swap-first-last}, которая переставляет в списке аргументе первый и последний элементы}
+
+\subsection{Разрушающая структуру}
+
+\begin{lstlisting}
+(defun nswap-first-last (lst)
+  (let ((el1 (car lst))
+        (last-el (last lst)))
+    (setf (car lst) (car last-el))
+    (setf (car last-el) el1)
+    lst))
+\end{lstlisting}
+
+\subsection{Не разрушающая структуру}
+
+\begin{lstlisting}
+(defun swap-first-last (lst)
+  (let ((el1 (car lst))
+        (last-el (car (last lst))))
+    (reverse (cons el1 
+          (cdr 
+            (reverse 
+              (cons last-el (cdr lst))))))))
+\end{lstlisting}
+
+\section{Напишите функцию \texttt{swap-two-ellement}, которая переставляет в списке-аргументе два указанных своими порядковыми номерами элемента в этом списке}
+
+\section{Разрушающая структуру}
+
+\begin{lstlisting}
+(defun nswap-two-ellement (n1 n2 lst)
+  (let ((len (length lst)))
+    (and (< n1 len) (< n2 len)
+         (let ((el1 (nth n1 lst))
+               (el2 (nth n2 lst)))
+           (setf (nth n1 lst) el2)
+           (setf (nth n2 lst) el1)
+           lst))))
+\end{lstlisting}
+
+\section{Не разрушающая структуру}
+
+\begin{lstlisting}
+(defun swap-two-ellement (n1 n2 lst)
+  (let ((len (length lst))
+        (lst-copy (copy-list lst)))
+    (and (< n1 len) (< n2 len)
+         (let ((el1 (nth n1 lst))
+               (el2 (nth n2 lst)))
+           (setf (nth n1 lst-copy) el2)
+           (setf (nth n2 lst-copy) el1)
+           lst-copy))))
+\end{lstlisting}
+
+\section{Напишите две функции, \texttt{swap-to-left} и \texttt{swap-to-right}, которые производят круговую перестановку в списке-аргументе влево и вправо, соответственно}
+
+\begin{lstlisting}
+(defun swap-to-left (lst)
+  (and lst
+       (let ((tail (cdr lst))
+             (head (car lst)))
+         (reverse (cons head (reverse tail))))))
+
+(defun swap-to-right (lst)
+  (and lst
+       (let ((last-el (car (last lst))))
+         (reverse (cdr (reverse (cons last-el lst)))))))
+\end{lstlisting}
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Способы определения функций}
+
+%FIXME сделать
+
+\section{Варианты и методы модификации списков}
+
+%FIXME сделать

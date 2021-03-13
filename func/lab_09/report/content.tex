@@ -1,0 +1,110 @@
+\chapter{Задания}
+
+\section{Написать функцию, которая выбирает из заданного списка только ты числа, которые больше 1 и меньше 10 (Вариант: между 2 заданными границами)}
+
+\textbf{Реализация для случая, когда между 2 заданными границами}
+
+\subsection{С помощью функционалов}
+
+\begin{lstlisting}
+(defun list-between-only (from to lst) 
+  (reverse (reduce #'(lambda (acc el) 
+              (cond ((and (< el to) (> el from)) (cons el acc))
+                    (T acc)))
+          (cons nil lst))))
+\end{lstlisting}
+
+\subsection{Рекурсия}
+
+\begin{lstlisting}
+(defun list-btwn-only-internal (from to lst acc)
+  (cond ((null lst) acc)
+        (T (let ((head (car lst)))
+          (cond ((and (< head to) (> head from)) 
+                 (list-btwn-only-internal from to (cdr lst) (cons head acc)))
+                (T (list-btwn-only-internal from to (cdr lst) acc)))))))
+(defun list-btwn-only-rec (from to lst)
+  (reverse (list-btwn-only-internal from to lst nil)))
+\end{lstlisting}
+
+\section{Написать функцию, вычисляющую декартово произведение двух своих списков-аргументов}
+
+\subsection{С помощью функционалов}
+
+\begin{lstlisting}
+(defun list-mul (lst1 lst2)
+  (reduce #'(lambda (acc outer-el)
+              (append acc (mapcar #'(lambda (inner-el)
+                          (cons outer-el inner-el))
+                      lst2)))
+          (cons nil lst1)))
+\end{lstlisting}
+
+\subsection{Рекурсия}
+\begin{lstlisting}
+(defun list-mul-internal (cur-lst1 src-lst1 lst2 acc)
+  (cond ((null lst2) acc)
+        ((null cur-lst1) (list-mul-internal src-lst1 src-lst1 (cdr lst2) acc))
+        (T (list-mul-internal (cdr cur-lst1) src-lst1 lst2 (cons (cons (car cur-lst1) (car lst2)) acc)))))
+(defun list-mul-rec (lst1 lst2)
+  (and lst1 lst2 (reverse (list-mul-internal lst1 lst1 lst2 nil))))
+\end{lstlisting}
+
+
+\section{Почему так реализовано \texttt{reduce}, в чем причина?}
+
+\texttt{(reduce #'+ ()) -> 0}
+
+Поведение в данном примере обусловлено работой функции \texttt{+}. Эта функция --- функционал, который при 0 количестве аргументов возвращает значение 0. Если подать на вход \texttt{reduce} функцию, которая не может обработать 0 аргументов (например, математическая функция \texttt{cons}), то вызов \texttt{reduce} с пустым списком в качестве второго аргумента вернет ошибку (\texttt{invalid number of arguments: 0}). При этом, если подано более одного аргумента, то \texttt{reduce} выполняет следующие действия:
+\begin{enumerate}
+    \item сохраняет первый элемент списка в область памяти (для определенности назовем ее \texttt{acc});
+    \item для всех остальных элементов списка выполняет переданную в качестве первого аргумента функцию, подавая на вход 2 аргумента (\texttt{acc} и очередной элемент списка) и сохраняя результат в \texttt{acc}.
+\end{enumerate}
+
+Пример упрощенной реализации \texttt{reduce} (в данной реализации опущены проверки аргументов):
+
+\begin{lstlisting}
+(defun my-reduce-internal (func lst acc)
+  (cond ((null lst) acc)
+        (T (my-reduce-internal func (cdr lst) (funcall func acc (car lst))))))
+(defun my-reduce (func lst)
+  (cond ((null lst) (funcall func))
+        (T (my-reduce-internal func (cdr lst) (car lst)))))
+\end{lstlisting}
+
+\section{Пусть \texttt{list-of-lists} --- список, состоящий из списков. Написать функцию, которая вычисляет сумму длин всех элементов \texttt{list-of-lists}, то есть, например, для аргумента \texttt{((1 2) (3 4)) -> 4}}
+
+\subsection{С помощью функционалов}
+
+\begin{lstlisting}
+(defun sum-lens (list-of-lists)
+  (reduce #'(lambda (acc lst) (+ acc (length lst)))
+          (cons 0 list-of-lists)))
+\end{lstlisting}
+
+\subsection{Рекурсия}
+
+\begin{lstlisting}
+(defun sum-lens-rec-internal (lol acc)
+  (cond ((null lol) acc)
+        (T (sum-lens-rec-internal (cdr lol) (+ acc (length (car lol)))))))
+(defun sum-lens-rec (list-of-lists)
+  (and (listp list-of-lists) (sum-lens-rec-internal list-of-lists 0)))
+\end{lstlisting}
+
+\section{Используя рекурсию, написать функцию, которая по исходному списку стоит список квадратов чисел смешанного структурированного списка}
+
+\begin{lstlisting}
+(defun square (x) (* x x))
+(defun square-list-internal (lst acc)
+  (cond ((null lst) acc)
+        (T (square-list-internal (cdr lst) (cons (square (car lst)) acc)))))
+(defun square-list (lst)
+  (reverse (square-list-internal lst nil)))
+\end{lstlisting}
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Классификация рекурсивных функций}
+
+%FIXME сделать

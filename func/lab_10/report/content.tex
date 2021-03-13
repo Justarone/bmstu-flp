@@ -1,0 +1,110 @@
+\chapter{Задания}
+
+\section{Написать рекурсивную версию (с именем \texttt{rec-add}) вычисления суммы чисел заданного списка}
+
+\begin{lstlisting}
+(defun rec-add-internal (lst acc)
+  (cond ((null lst) acc)
+        (T (rec-add-internal (cdr lst) (+ acc (car lst))))))
+(defun rec-add (lst)
+  (rec-add-internal lst 0))
+\end{lstlisting}
+
+\section{Написать рекурсивную функцию с именем \texttt{rec-nth} функции \texttt{nth}}
+
+\begin{lstlisting}
+(defun rec-nth (n lst)
+  (and lst (cond ((zerop n) (car lst))
+                 (T (rec-nth (- n 1) (cdr lst))))))
+\end{lstlisting}
+
+\section{Написать рекурсивную функцию \texttt{alloddr}, которая возвращает \texttt{t}, когда все элементы списка нечётные}
+
+\begin{lstlisting}
+(defun alloddr (lst)
+  (or (null lst) 
+      (and (oddp (car lst))
+           (alloddr (cdr lst)))))
+\end{lstlisting}
+
+\section{Написать рекурсивную функцию, относящуюся к хвостовой рекурсии с одним тестом завершения, которая возвращает последний элемент списка-аргумента}
+
+%FIXME Что за "один тест завершения"?... Надо уточнить!
+
+\begin{lstlisting}
+(defun last-rec (lst)
+  (cond ((null (cdr lst)) (car lst))
+        (T (last-rec (cdr lst)))))
+\end{lstlisting}
+
+\section{Написать рекурсивную функцию, относящуюся к дополняемой рекурсии с одним тестом завершения, которая вычисляет сумму всех чисел от 0 до \textit{n}-ого аргумента функции}
+
+%FIXME кто блин такая ваша "дополняемая рекурсия"?
+
+\subsection{От \textit{n}-аргумента функции, до последнего $>= 0$}
+
+\subsection{От \textit{n}-аргумента функции до \textit{m}-аргумента с шагом \textit{d}}
+
+\section{Написать рекурсию, которая возвращает последнее нечетное число из числового списка, возможно создавая некоторые вспомогательные функции}
+
+\begin{lstlisting}
+(defun last-odd-internal (lst cur-odd)
+  (cond ((null lst) cur-odd)
+        (T (cond ((oddp (car lst)) (last-odd-internal (cdr lst) (car lst)))
+                 (T (last-odd-internal (cdr lst) cur-odd))))))
+(defun last-odd (lst)
+  (last-odd-internal lst nil))
+\end{lstlisting}
+
+\section{Используя \texttt{cons}-дополняемую рекурсию с одним тестом завершения, написать функцию, которая получает как аргумент список чисел, а возвращает список квадратов этих чисел в том же порядке}
+
+%FIXME ну мне определенно не помешает где-то разузнать, что это за рекурсии такие, но очевидно, что здесь такое решение должно быть..
+\begin{lstlisting}
+(defun cons-square (lst)
+  (and lst (cons ((lambda (x) (* x x)) (car lst))
+                 (con-square (cdr lst)))))
+\end{lstlisting}
+
+\section{Написать функцию с именем \texttt{select-odd}, которая из заданного списка выбирает все нечетные числа}
+
+Варианты:
+\begin{enumerate}
+    \item select-even;
+    \item вычисляет сумму всех нечетных чисел (sum-all-odd) или сумму всех четных чисел из заданного списка.
+\end{enumerate}
+
+\begin{lstlisting}
+; reverses the list
+(defun my-filter-reducer (filter reducer lst init-el)
+    (reduce #'(lambda (acc x)
+                (cond ((funcall filter x) (funcall reducer acc x))
+                      (T acc)))
+            (cons init-el lst)))
+
+(defun my-filter (func lst)
+  (reverse (my-filter-reducer func #'(lambda (acc x) (cons x acc)) lst nil)))
+
+(defun select-odd (lst)
+  (my-filter #'oddp lst))
+(defun select-even (lst)
+  (my-filter #'evenp lst))
+
+(defun sum-all-odd (lst)
+  (my-filter-reducer #'oddp #'+ lst 0))
+(defun sum-all-even (lst)
+  (my-filter-reducer #'evenp #'+ lst 0))
+\end{lstlisting}
+
+
+\section{Создать и обработать смешанный структурированный список с информацией:}
+
+%FIXME сделать
+
+\begin{itemize}
+    \item ФИО;
+    \item зарплата;
+    \item возраст;
+    \item категория (квалификация).
+\end{itemize}
+
+Изменить зарплату в зависимости от заданного условия, и подсчитать суммарную зарплату. Использовать композиции функций.

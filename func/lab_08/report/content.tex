@@ -1,0 +1,67 @@
+\chapter{Задания}
+
+\section{Напишите функцию, которая умножает на заданное число-аргумент все числа из заданного списка-аргумента, когда...}
+
+\subsection{а) все элементы списка --- числа}
+
+\begin{lstlisting}
+(defun mult-all-numbers (mult lst)
+  (mapcar #'(lambda (el) (* el mult)) lst))
+\end{lstlisting}
+
+\subsection{б) элементы списка --- любые объекты}
+
+\begin{lstlisting}
+(defun compl-mult-all-numbers (mult lst)
+  (mapcar #'(lambda (el) 
+              (cond ((listp el) (compl-mult-all-numbers mult el))
+                    (T (* el mult))))
+          lst))
+\end{lstlisting}
+
+\section{Напишите функцию, \texttt{select-between}, которая из списка-аргумента, содержащего только числа, выбирает только те, которые расположены между двумя указанными границами-аргументами и возвращает их в виде списка (упорядоченного по возрастанию списка чисел)}
+
+\begin{lstlisting}
+(defun get-n (n lst acc)
+  (cond ((or (null lst) (<= n 0)) (reverse acc))
+  (T (get-n (- n 1) (cdr lst) (cons (car lst) acc)))))
+
+(defun select-between (from to lst) 
+    (sort (get-n (+ (- to from) 1) (nthcdr from lst) Nil) #'<))
+\end{lstlisting}
+
+\section{Что будет результатом \texttt{(mapcar 'вектор '(570-40-8))}?}
+
+Данная программа завершится с ошибкой по причине того, что функции \texttt{вектор} не существует.
+
+\section{Напишите функцию, которая уменьшает на 10 все числа из списка аргумента этой функции}
+
+\begin{lstlisting}
+(defun lst-minus-10 (lst)
+  (mapcar #'(lambda (x) (- x 10)) lst))
+\end{lstlisting}
+
+\section{Написать функцию, которая возвращает первый аргумент списка-аргумента, который сам является непустым спском}
+
+\begin{lstlisting}
+(defun first-sublist (lst)
+  (and lst (cond ((listp (car lst)) (car lst))
+                 (T (first-sublist (cdr lst))))))
+\end{lstlisting}
+
+\section{Найти сумму числовых элементов смешанного структурированного списка}
+
+\begin{lstlisting}
+(defun count-all-in-list (lst)
+  (reduce #'(lambda (acc el)
+              (cond ((listp el) (+ acc (count-all-in-list el)))
+                    ((numberp el) (+ acc el))
+                    (T acc)))
+          (cons 0 lst)))
+\end{lstlisting}
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Порядок работы и варианты использования функционалов}
+
+%FIXME сделать
