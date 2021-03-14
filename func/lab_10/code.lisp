@@ -17,6 +17,16 @@
   (cond ((null (cdr lst)) (car lst))
         (T (last-rec (cdr lst)))))
 
+(defun sum-n (n lst)
+  (cond ((or (null lst) (= n 0)) 0)
+        (T (+ (car lst) (sum-n (- n 1) (cdr lst))))))
+
+(defun sum-nmd-internal (m d lst)
+  (cond ((or (null lst) (< m 0)) 0)
+        (T (+ (car lst) (sum-nmd-internal (- m d) d (nthcdr d lst))))))
+(defun sum-nmd (n m d lst)
+  (sum-nmd-internal (- (- m 1) d) d (nthcdr n lst)))
+
 (defun last-odd-internal (lst cur-odd)
   (cond ((null lst) cur-odd)
         (T (cond ((oddp (car lst)) (last-odd-internal (cdr lst) (car lst)))
@@ -29,22 +39,47 @@
                  (con-square (cdr lst)))))
 
 
-; reverses the list
-(defun my-filter-reducer (filter reducer lst init-el)
-    (reduce #'(lambda (acc x)
-                (cond ((funcall filter x) (funcall reducer acc x))
-                      (T acc)))
-            (cons init-el lst)))
-
-(defun my-filter (func lst)
-  (reverse (my-filter-reducer func #'(lambda (acc x) (cons x acc)) lst nil)))
-
 (defun select-odd (lst)
-  (my-filter #'oddp lst))
+  (mapcan #'(lambda (x) (if (oddp x) (list x))) lst))
 (defun select-even (lst)
-  (my-filter #'evenp lst))
+  (mapcan #'(lambda (x) (if (evenp x) (list x))) lst))
 
 (defun sum-all-odd (lst)
-  (my-filter-reducer #'oddp #'+ lst 0))
+  (apply #'+ (select-odd lst)))
 (defun sum-all-even (lst)
-  (my-filter-reducer #'evenp #'+ lst 0))
+  (apply #'+ (select-even lst)))
+
+
+(setf people (list
+               (list (cons 'fio "Ivanov Ivan Ivanovich")
+                (cons 'salary 1000)
+                (cons 'age 18)
+                (cons 'category "programmer"))
+               (list (cons 'fio "Petrov Ivan Ivanovich")
+                (cons 'salary 2000)
+                (cons 'age 28)
+                (cons 'category "builder"))
+               (list (cons 'fio "Petrov Petr Petrovich")
+                (cons 'salary 3000)
+                (cons 'age 32)
+                (cons 'category "football manager"))
+               ))
+
+(defun salary-wrapper (salary-func man) 
+  (let ((salary-item (assoc 'salary man)))
+    (setf (cdr salary-item) (funcall salary-func (cdr salary-item)))))
+
+(defun change-salaries (cond-func change-func lst)
+  (mapcar #'(lambda (man) 
+              (cond ((funcall cond-func man) (salary-wrapper change-func man))
+                    (T man)))
+          lst))
+
+(change-salaries #'(lambda (man) (equal (cdr (assoc 'category man)) "programmer"))
+                 #'(lambda (salary) (* salary 99)) 
+                 people)
+
+(defun count-salaries (people)
+  (reduce #'(lambda (acc man)
+              (+ acc (cdr (assoc 'salary man))))
+          (cons 0 people)))

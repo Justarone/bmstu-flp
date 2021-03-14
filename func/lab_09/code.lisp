@@ -1,16 +1,15 @@
 (defun list-between-only (from to lst)
-  (reverse (reduce #'(lambda (acc el)
-                       (cond ((and (< el to) (> el from)) (cons el acc))
-                             (T acc)))
-                   (cons nil lst))))
+  (mapcan #'(lambda (el)
+              (if (and (< el to) (> el from)) (list el)))
+          lst))
 
 
 (defun list-btwn-only-internal (from to lst acc)
   (cond ((null lst) acc)
         (T (let ((head (car lst)))
-          (cond ((and (< head to) (> head from)) 
-                 (list-btwn-only-internal from to (cdr lst) (cons head acc)))
-                (T (list-btwn-only-internal from to (cdr lst) acc)))))))
+             (cond ((and (< head to) (> head from))
+                    (list-btwn-only-internal from to (cdr lst) (cons head acc)))
+                   (T (list-btwn-only-internal from to (cdr lst) acc)))))))
 (defun list-btwn-only-rec (from to lst)
   (reverse (list-btwn-only-internal from to lst nil)))
 
@@ -23,11 +22,11 @@
 
 ; если убрать append будет эффективнее
 (defun list-mul (lst1 lst2)
-  (reduce #'(lambda (acc outer-el)
-              (append acc (mapcar #'(lambda (inner-el)
-                                      (cons outer-el inner-el))
-                                  lst2)))
-          (cons nil lst1)))
+  (mapcan #'(lambda (outer-el)
+              (mapcar #'(lambda (inner-el)
+                          (cons outer-el inner-el))
+                      lst2))
+          lst1))
 
 (defun list-mul-internal (cur-lst1 src-lst1 lst2 acc)
   (cond ((null lst2) acc)

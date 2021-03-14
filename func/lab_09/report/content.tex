@@ -7,11 +7,10 @@
 \subsection{С помощью функционалов}
 
 \begin{lstlisting}
-(defun list-between-only (from to lst) 
-  (reverse (reduce #'(lambda (acc el) 
-              (cond ((and (< el to) (> el from)) (cons el acc))
-                    (T acc)))
-          (cons nil lst))))
+(defun list-between-only (from to lst)
+  (mapcan #'(lambda (el)
+              (if (and (< el to) (> el from)) (list el)))
+          lst))
 \end{lstlisting}
 
 \subsection{Рекурсия}
@@ -33,11 +32,11 @@
 
 \begin{lstlisting}
 (defun list-mul (lst1 lst2)
-  (reduce #'(lambda (acc outer-el)
-              (append acc (mapcar #'(lambda (inner-el)
+  (mapcan #'(lambda (outer-el)
+              (mapcar #'(lambda (inner-el)
                           (cons outer-el inner-el))
-                      lst2)))
-          (cons nil lst1)))
+                      lst2))
+          lst1))
 \end{lstlisting}
 
 \subsection{Рекурсия}
@@ -107,4 +106,15 @@
 
 \section{Классификация рекурсивных функций}
 
-%FIXME сделать
+\textbf{Рекурсия} --- ссылка на описываемый объект во время его описания.
+
+Классификация рекурсивных функций:
+\begin{itemize}
+    \item Простая (рекурсивный вызов --- единственный);
+    \item Второго порядка (несколько рекурсивных вызовов);
+    \item Взаимная рекурсия (используются несколько рекурсивных функций, которые могут друг друга вызывать).
+    \item Хвостовая рекурсия (при очередном вызове рекурсивной функции все действия до входа выполнены, а при выходе ничего более делать не приходится);
+    \item Дополняемая рекурсия (результат рекурсии используется, как аргумент некоторой другой функции (которую называют \textit{дополняемой функцией}); частный случай --- \texttt{cons}-дополняемая рекурсия).
+\end{itemize}
+
+

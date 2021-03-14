@@ -29,21 +29,31 @@
 
 \section{Написать рекурсивную функцию, относящуюся к хвостовой рекурсии с одним тестом завершения, которая возвращает последний элемент списка-аргумента}
 
-%FIXME Что за "один тест завершения"?... Надо уточнить!
-
 \begin{lstlisting}
 (defun last-rec (lst)
-  (cond ((null (cdr lst)) (car lst))
+  (cond ((or (null lst) (null (cdr lst)) (car lst)))
         (T (last-rec (cdr lst)))))
 \end{lstlisting}
 
 \section{Написать рекурсивную функцию, относящуюся к дополняемой рекурсии с одним тестом завершения, которая вычисляет сумму всех чисел от 0 до \textit{n}-ого аргумента функции}
 
-%FIXME кто блин такая ваша "дополняемая рекурсия"?
-
 \subsection{От \textit{n}-аргумента функции, до последнего $>= 0$}
 
+\begin{lstlisting}
+(defun sum-n (n lst)
+  (cond ((or (null lst) (= n 0)) 0)
+        (T (+ (car lst) (sum-n (- n 1) (cdr lst))))))
+\end{lstlisting}
+
 \subsection{От \textit{n}-аргумента функции до \textit{m}-аргумента с шагом \textit{d}}
+
+\begin{lstlisting}
+(defun sum-nmd-internal (m d lst)
+  (cond ((or (null lst) (< m 0)) 0)
+        (T (+ (car lst) (sum-nmd-internal (- m d) d (nthcdr d lst))))))
+(defun sum-nmd (n m d lst)
+  (sum-nmd-internal (- (- m 1) d) d (nthcdr n lst)))
+\end{lstlisting}
 
 \section{Написать рекурсию, которая возвращает последнее нечетное число из числового списка, возможно создавая некоторые вспомогательные функции}
 
@@ -58,11 +68,10 @@
 
 \section{Используя \texttt{cons}-дополняемую рекурсию с одним тестом завершения, написать функцию, которая получает как аргумент список чисел, а возвращает список квадратов этих чисел в том же порядке}
 
-%FIXME ну мне определенно не помешает где-то разузнать, что это за рекурсии такие, но очевидно, что здесь такое решение должно быть..
 \begin{lstlisting}
 (defun cons-square (lst)
   (and lst (cons ((lambda (x) (* x x)) (car lst))
-                 (con-square (cdr lst)))))
+                 (cons-square (cdr lst)))))
 \end{lstlisting}
 
 \section{Написать функцию с именем \texttt{select-odd}, которая из заданного списка выбирает все нечетные числа}
@@ -74,31 +83,19 @@
 \end{enumerate}
 
 \begin{lstlisting}
-; reverses the list
-(defun my-filter-reducer (filter reducer lst init-el)
-    (reduce #'(lambda (acc x)
-                (cond ((funcall filter x) (funcall reducer acc x))
-                      (T acc)))
-            (cons init-el lst)))
-
-(defun my-filter (func lst)
-  (reverse (my-filter-reducer func #'(lambda (acc x) (cons x acc)) lst nil)))
-
 (defun select-odd (lst)
-  (my-filter #'oddp lst))
+  (mapcan #'(lambda (x) (if (oddp x) (list x))) lst))
 (defun select-even (lst)
-  (my-filter #'evenp lst))
+  (mapcan #'(lambda (x) (if (evenp x) (list x))) lst))
 
 (defun sum-all-odd (lst)
-  (my-filter-reducer #'oddp #'+ lst 0))
+  (apply #'+ (select-odd lst)))
 (defun sum-all-even (lst)
-  (my-filter-reducer #'evenp #'+ lst 0))
+  (apply #'+ (select-even lst)))
 \end{lstlisting}
 
 
 \section{Создать и обработать смешанный структурированный список с информацией:}
-
-%FIXME сделать
 
 \begin{itemize}
     \item ФИО;
@@ -108,3 +105,54 @@
 \end{itemize}
 
 Изменить зарплату в зависимости от заданного условия, и подсчитать суммарную зарплату. Использовать композиции функций.
+
+Исходные данные:
+
+\begin{lstlisting}
+(setf people (list
+               (list (cons 'fio "Ivanov Ivan Ivanovich")
+                (cons 'salary 1000)
+                (cons 'age 18)
+                (cons 'category "programmer"))
+               (list (cons 'fio "Petrov Ivan Ivanovich")
+                (cons 'salary 2000)
+                (cons 'age 28)
+                (cons 'category "builder"))
+               (list (cons 'fio "Petrov Petr Petrovich")
+                (cons 'salary 3000)
+                (cons 'age 32)
+                (cons 'category "football manager"))
+               ))
+\end{lstlisting}
+
+Изменение зарплаты в зависимости от заданного условия:
+
+\begin{lstlisting}
+(defun salary-wrapper (salary-func man) 
+  (let ((salary-item (assoc 'salary man)))
+    (setf (cdr salary-item) (funcall salary-func (cdr salary-item)))))
+
+(defun change-salaries (cond-func change-func lst)
+  (mapcar #'(lambda (man) 
+              (cond ((funcall cond-func man) (salary-wrapper change-func man))
+                    (T man)))
+          lst))
+\end{lstlisting}
+
+Подсчет суммарной зарплаты:
+
+\begin{lstlisting}
+(defun count-salaries (people)
+  (reduce #'(lambda (acc man)
+              (+ acc (cdr (assoc 'salary man))))
+          (cons 0 people)))
+\end{lstlisting}
+
+Пример вызова:
+
+\begin{lstlisting}
+(change-salaries #'(lambda (man) (equal (cdr (assoc 'category man)) "programmer"))
+                 #'(lambda (salary) (* salary 99)) 
+                 people)
+(count-salaries people)
+\end{lstlisting}
