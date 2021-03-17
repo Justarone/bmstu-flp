@@ -1,4 +1,5 @@
 (defconstant +dices-amount+ 2)
+(defconstant +max-score+ 6)
 (defconstant +magic-scores+ '(7 11))
 (defconstant +rethrow-combinations+ '((1 1) (6 6)))
 
@@ -10,14 +11,14 @@
   (iter-times-internal times fn nil))
 
 (defun throw-dices (times)
-  (iter-times times #'(lambda (_x) (+ (random 6) 1))))
+  (iter-times times #'(lambda (_x) (+ (random +max-score+) 1))))
 
 (defun score-with-rules (i dices)
   (let ((sum (reduce #'+ dices)))
     (format T "Player ~a has ~a!~%" i dices)
     (cond ((member dices +rethrow-combinations+ :test #'equal)
            (score-with-rules i (throw-dices +dices-amount+)))
-          ((member sum +magic-scores+) (cons i (+ +dices-amount+ 1)))
+          ((member sum +magic-scores+) (cons i (+ (* +dices-amount+ +max-score+) 1)))
           (T (cons i sum)))))
 
 (defun collect-throws (amount)
