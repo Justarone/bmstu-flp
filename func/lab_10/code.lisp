@@ -21,11 +21,9 @@
   (cond ((or (null lst) (= n 0)) 0)
         (T (+ (car lst) (sum-n (- n 1) (cdr lst))))))
 
-(defun sum-nmd-internal (m d lst)
-  (cond ((or (null lst) (< m 0)) 0)
-        (T (+ (car lst) (sum-nmd-internal (- m d) d (nthcdr d lst))))))
 (defun sum-nmd (n m d lst)
-  (sum-nmd-internal (- (- m 1) d) d (nthcdr n lst)))
+  (cond ((> n m) 0)
+        (T (+ (nth n lst) (sum-nmd n (- m d) d (nthcdr d lst))))))
 
 (defun last-odd-internal (lst cur-odd)
   (cond ((null lst) cur-odd)
