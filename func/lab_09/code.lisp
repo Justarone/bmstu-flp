@@ -1,6 +1,6 @@
 (defun list-between-only (from to lst)
   (mapcan #'(lambda (el)
-              (if (and (< el to) (> el from)) (list el)))
+              (and (< el to) (> el from) (list el)))
           lst))
 
 
@@ -13,12 +13,11 @@
 (defun list-btwn-only-rec (from to lst)
   (reverse (list-btwn-only-internal from to lst nil)))
 
-(defun square (x) (* x x))
-(defun square-list-internal (lst acc)
-  (cond ((null lst) acc)
-        (T (square-list-internal (cdr lst) (cons (square (car lst)) acc)))))
 (defun square-list (lst)
-  (reverse (square-list-internal lst nil)))
+  (cond ((null lst) lst)
+        ((atom lst) (* lst lst))
+        (T (cons (square-list (car lst))
+                 (square-list (cdr lst))))))
 
 ; если убрать append будет эффективнее
 (defun list-mul (lst1 lst2)
