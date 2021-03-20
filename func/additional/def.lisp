@@ -6,8 +6,8 @@
 
 (defun my-memberp (elem lst)
   (and lst
-       (equal elem (car lst))
-       (my-memberp elem (cdr lst))))
+       (cond ((equal elem (car lst)) T)
+       (T (my-memberp elem (cdr lst))))))
 
 (defun my-subset (lst1 lst2)
   (cond ((null lst1) T)
