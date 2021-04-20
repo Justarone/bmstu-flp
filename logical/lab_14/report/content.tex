@@ -1,0 +1,166 @@
+\chapter{Лабораторная работа №14}
+
+\textbf{Задание:} используя базу знаний, хранящую знания (лаб. 13):
+\begin{itemize}
+    \item \textbf{<<Телефонный справочник>>:} Фамилия, №тел, Адрес - структура (Город, Улица, №дома, №кв),
+    \item \textbf{<<Автомобили>>:} Фамилия\_владельца, Марка, Цвет, Стоимость, и др.,
+    \item \textbf{<<Вкладчики банка>>:} Фамилия, Банк, счет, сумма, др.
+\end{itemize}
+
+Владелец может иметь несколько телефонов, автомобилей, вкладов (Факты). В разных городах есть однофамильцы, в одном городе --- фамилия уникальна.
+
+Используя \textbf{Коньюктивное правило и простой вопрос}, обеспечить возможность поиска:
+
+По Марке и Цвету автомобиля найти Фамилию, Город, Телефон и Банки, в которых владелец автомобиля имеет вклады. Лишей информации не находить и не передавать!!!
+
+Владельцев может быть \textbf{несколько} (не более 3-х), \textbf{один} и \textbf{ни одного}.
+
+\begin{enumerate}
+    \item Для каждого из трёх вариантов \textbf{словесно подробно} описать порядок формирования ответа (в виде таблицы). При этом, указать – отметить моменты очередного запуска алгоритма унификации и полный результат его работы. Обосновать следующий шаг работы системы. Выписать унификаторы – подстановки. Указать моменты, причины и результат отката, если он есть.
+    \item Для случая нескольких владельцев (2-х): приведите примеры (таблицы) работы системы \textbf{при разных порядках} следования в БЗ процедур, и знаний в них: (\textbf{<<Телефонный справочник>>, <<Автомобили>>, <<Вкладчики банков>>}, или: \textbf{<<Автомобили>>, <<Вкладчики банков>>, <<Телефонный справочник>>})) Сделайте вывод: Одинаковы ли: множество работ и объём работ в разных случаях?
+    \item Оформите 2 таблицы, демонстрирующие \textbf{порядок работы алгоритма унификации} вопроса и подходящего заголовка правила (для двух случаев из пункта 2) и укажите результаты его работы: ответ и побочный эффект.
+\end{enumerate}
+
+\begin{lstlisting}
+domains
+  surname = string
+  city, street = string
+  house, flat = integer
+  phone = string
+  address = addr(city, street, house, flat)
+  mark = string
+  color = string
+  price = integer
+  bank = string
+  id, amount = integer
+  
+predicates
+  phone(surname, phone, address)
+  car(surname, mark, color, price)
+  bank_depositor(surname, bank, id, amount)
+  man_by_car(mark, color, surname, city, phone, bank)
+  
+clauses
+  phone("Perestoronin", "+79999999999", addr("Moscow", "Lesnaya", 12, 2)).
+  phone("Romanov", "+71111111111", addr("Moscow", "Lesnaya", 13, 87)).
+  phone("Nitenko", "+73333333333", addr("Ekaterinburg", "Kamennaya", 13, 87)).
+  phone("Yacuba", "+66666666666", addr("Moscow", "Wall-street", 123, 87)).
+  car("Nitenko", "bmw", "green", 1000).
+  car("Romanov", "bmw", "green", 1000).
+  car("Yacuba", "volkswagen", "red", 10000).
+  car("Yacuba", "golfR", "black", 20000).
+  car("Romanov", "bike", "white", 10).
+  car("Perestoronin", "mercedes", "yellow", 30000).
+  bank_depositor("Nitenko", "Sber", 22, 1000).
+  bank_depositor("Yacuba", "Sber", 33, 10000).
+  bank_depositor("Yacuba", "Alfa", 44, 20000).
+  bank_depositor("Romanov", "Sper", 238, 10).
+  bank_depositor("Perestoronin", "Maze", 1, 10000).
+  
+  man_by_car(Mark, Color, Surname, City, Phone, Bank) :- 
+      car(Surname, Mark, Color, _),
+      phone(Surname, Phone, addr(City, _, _, _)),
+      bank_depositor(Surname, Bank, _, _).
+  
+goal
+    man_by_car("bmw", "green", Surname, City, Phone, Bank).
+    %man_by_car("volkswagen", "red", Surname, City, Phone, Bank).
+    %man_by_car("ford", "mustang", Surname, City, Phone, Bank).
+\end{lstlisting}
+
+\textbf{Таблицы для заданий 1-3 представлены на отдельных листах и приложены к отчету.}
+
+\chapter{Лабораторная работа №15}
+
+
+\textbf{Задание:} создать базу знаний \textbf{<<Собственники>>}, дополнив базу знаний, хранящую знания (лаб. 13):
+
+\begin{itemize}
+    \item \textbf{<<Телефонный справочник>>}: Фамилия, №тел, Адрес – структура (Город, Улица, №дома, №кв),
+    \item \textbf{<<Автомобили>>}: Фамилия\_владельца, Марка, Цвет, Стоимость, и др.,
+    \item \textbf{<<Вкладчики банков>>}: Фамилия, Банк, счёт, сумма, др.
+\end{itemize}
+
+знаниями о дополнительной \textbf{собственности} владельца. \textbf{Преобразовать} знания об автомобиле к форме знаний о собственности.
+
+Вид собственности (кроме автомобиля):
+\begin{itemize}
+    \item \textbf{Строение, стоимость} и другие его характеристики;
+    \item \textbf{Участок, стоимость} и другие его характеристики;
+    \item \textbf{Водный\_транспорт, стоимость} и другие его характеристики.
+\end{itemize}
+
+Описать и использовать вариантный домен: \textbf{Собственность}. Владелец может иметь, но \textbf{только} один объект \textbf{каждого вида собственности} (это касается и \textbf{автомобиля}), или не иметь некоторых видов собственности.
+Используя \textbf{конъюнктивное правило и разные формы задания} \textbf{одного вопроса} (пояснять для какого №задания – какой вопрос), обеспечить возможность поиска:
+\begin{enumerate}
+    \item Названий всех объектов собственности заданного субъекта,
+    \item Названий и стоимости всех объектов собственности заданного субъекта,
+    \item Разработать правило, позволяющее найти суммарную стоимость всех объектов собственности заданного субъекта.
+\end{enumerate}
+Для 2-го пункта и \textbf{одной} фамилии \textbf{составить таблицу}, отражающую конкретный порядок работы системы, с объяснениями порядка работы и особенностей использования доменов (указать конкретные T1 и T2 и полную подстановку на каждом шаге)
+
+\begin{lstlisting}
+domains
+  surname = string
+  city, street = string
+  house, flat = integer
+  phone = string
+  address = addr(city, street, house, flat)
+  mark = string
+  color = string
+  price = integer
+  bank = string
+  id, amount = integer
+  name = string
+  ind_property = building(name, price);
+    region(name, price);
+    water_transport(mark, color, price);
+    car(mark, color, price).
+  
+predicates
+  phone(surname, phone, address)
+  bank_depositor(surname, bank, id, amount)
+  owner(surname, ind_property)
+
+  all_objects(surname, name)
+  all_objects_with_price(surname, name, price)
+  
+clauses
+  phone("Perestoronin", "+79999999999", addr("Moscow", "Lesnaya", 12, 2)).
+  phone("Romanov", "+71111111111", addr("Moscow", "Lesnaya", 13, 87)).
+  phone("Nitenko", "+73333333333", addr("Ekaterinburg", "Kamennaya", 13, 87)).
+  phone("Yacuba", "+66666666666", addr("Moscow", "Wall-street", 123, 87)).
+
+  owner("Nitenko", car("bmw", "green", 1000)).
+  owner("Nitenko", region("empty field", 1000)).
+  owner("Nitenko", building("Moscow center", 1000)).
+  owner("Romanov", car("bmw", "green", 1000)).
+  owner("Romanov", region("rublevka", 10000)).
+  owner("Romanov", building("mini-village", 20000)).
+  owner("Romanov", water_transport("bmw", "red", 10000)).
+  owner("Yacuba", car("golfR", "black", 20000)).
+  owner("Yacuba", building("tiktok", 200000)).
+  owner("Perestoronin", car("mercedes", "yellow", 30000)).
+  owner("Perestoronin", building("tent", 10)).
+
+  bank_depositor("Nitenko", "Sber", 22, 1000).
+  bank_depositor("Yacuba", "Sber", 33, 10000).
+  bank_depositor("Yacuba", "Alfa", 44, 20000).
+  bank_depositor("Romanov", "Sper", 238, 10).
+  bank_depositor("Perestoronin", "Maze", 1, 10000).
+
+  all_objects(Surname, Name) :- owner(Surname, car(Name, _, _)).
+  all_objects(Surname, Name) :- owner(Surname, building(Name, _)).
+  all_objects(Surname, Name) :- owner(Surname, region(Name, _)).
+  all_objects(Surname, Name) :- owner(Surname, water_transport(Name, _, _)).
+
+  all_objects_with_price(Surname, Name, Price) :- owner(Surname, car(Name, _, Price)).
+  all_objects_with_price(Surname, Name, Price) :- owner(Surname, building(Name, Price)).
+  all_objects_with_price(Surname, Name, Price) :- owner(Surname, region(Name, Price)).
+  all_objects_with_price(Surname, Name, Price) :- owner(Surname, water_transport(Name, _, Price)).
+goal
+  all_objects("Romanov", Name).
+  %all_objects_with_price("Perestoronin", Name, Price).
+\end{lstlisting}
+
+\textbf{Таблица для 2-го пункта представлена на отдельных листах и приложена к отчету.}
