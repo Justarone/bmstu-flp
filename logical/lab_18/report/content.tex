@@ -28,9 +28,9 @@ clauses
   rfact(_, Res, Acc) :- Res = Acc, !.
   fact(N, Res) :- rfact(N, Res, 1), !.
 
-  rfib(N, A, B, Res) :- N > 1, !, Na = B, Nb = B + A, Nn = N - 1, rfib(Nn, Na, Nb, Res).
+  rfib(N, A, B, Res) :- N > 2, !, Na = B, Nb = B + A, Nn = N - 1, rfib(Nn, Na, Nb, Res).
   rfib(_, _, B, Res) :- Res = B, !.
-  fib(N, Res) :- Nn = N - 1, rfib(Nn, 1, 1, Res), !.
+  fib(N, Res) :- rfib(N, 1, 1, Res), !.
 
 goal
   %fact(3, Res).
@@ -72,15 +72,15 @@ predicates
   append(intlist, intlist, intlist).
 
 clauses
-  rlength(Res, Len, [_ | T]) :- Nlen = Len + 1, rlength(Res, Nlen, T), !.
+  rlength(Res, Len, [_ | T]) :- Nlen = Len + 1, !, rlength(Res, Nlen, T).
   rlength(Res, Len, []) :- Res = Len, !.
   length(Res, List) :- rlength(Res, 0, List), !.
 
-  rsum(Res, Sum, [H | T]) :- Nsum = Sum + H, rsum(Res, Nsum, T), !.
+  rsum(Res, Sum, [H | T]) :- Nsum = Sum + H, !, rsum(Res, Nsum, T).
   rsum(Res, Sum, []) :- Res = Sum, !.
   sum(Res, List) :- rsum(Res, 0, List), !.
 
-  roddsum(Res, Sum, [_, H | T]) :- Nsum = Sum + H, roddsum(Res, Nsum, T), !.
+  roddsum(Res, Sum, [_, H | T]) :- Nsum = Sum + H, !, roddsum(Res, Nsum, T).
   roddsum(Res, Sum, []) :- Res = Sum, !.
   oddsum(Res, List) :- roddsum(Res, 0, List), !.
 
@@ -118,37 +118,37 @@ domains
   intlist = elem*
 
 predicates
-  only_more(intlist, integer, intlist)
   only_odd(intlist, intlist)
+  only_more(intlist, integer, intlist)
   delete_all(intlist, integer, intlist)
   delete_one(intlist, integer, intlist)
   to_set(intlist, intlist).
 
 clauses
-  only_more([H | T], Num, [H | Res]) :- H > Num, only_more(T, Num, Res), !.
+  only_odd([_, H | T], [H | Res]) :- !, only_odd(T, Res).
+  only_odd([], []) :- !.
+
+  only_more([H | T], Num, [H | Res]) :- H > Num, !, only_more(T, Num, Res).
   only_more([_ | T], Num, Res) :- only_more(T, Num, Res), !.
-  only_more([], _, []), !.
+  only_more([], _, []) :- !.
 
-  only_odd([_, H | T], [H | Res]) :- only_odd(T, Res), !.
-  only_odd([], []), !.
-
-  delete_all([H | T], Num, [H | Res]) :- H <> Num, delete_all(T, Num, Res), !.
+  delete_all([H | T], Num, [H | Res]) :- H <> Num, !, delete_all(T, Num, Res).
   delete_all([_ | T], Num, Res) :- delete_all(T, Num, Res), !.
-  delete_all([], _, []), !.
+  delete_all([], _, []) :- !.
 
   delete_one([H | T], Num, T) :- H = Num, !.
   delete_one([H | T], Num, [H | Res]) :- delete_one(T, Num, Res), !.
-  delete_one([], _, []), !.
+  delete_one([], _, []) :- !.
 
-  to_set([H | T], [H | Res]) :- delete_all(T, H, Nt), to_set(Nt, Res), !.
-  to_set([], []), !.
+  to_set([H | T], [H | Res]) :- delete_all(T, H, Nt), !, to_set(Nt, Res).
+  to_set([], []) :- !.
 
 goal
-  %only_more([1, 2, 3, 4, 5, 6], 3, Res).
-  %only_odd([1, 2, 3, 4, 5, 6], Res).
-  %delete_all([1, 2, 3, 1, 2, 3, 1, 2, 3], 1, Res).
-  %delete_one([1, 2, 3, 1, 2, 3, 1, 2, 3], 1, Res).
-  to_set([1, 2, 3, 1, 2, 3, 1, 2, 3], Res).
+  %only_more([1, 2, 3, 4, 5, 6], 3, Result).
+  %only_odd([1, 2, 3, 4, 5, 6], Result).
+  %delete_all([1, 2, 3, 1, 2, 3, 1, 2, 3], 1, Result).
+  %delete_one([1, 2, 3, 1, 2, 3, 1, 2, 3], 1, Result).
+  to_set([1, 2, 3, 1, 2, 3, 1, 2, 3], Result).
 \end{lstlisting}
 
 \textbf{Таблицы представлены на отдельных листах и приложены к отчету.}
