@@ -15,15 +15,15 @@ predicates
   append(intlist, intlist, intlist).
 
 clauses
-  rlength(Res, Len, [_ | T]) :- Nlen = Len + 1, rlength(Res, Nlen, T), !.
+  rlength(Res, Len, [_ | T]) :- Nlen = Len + 1, !, rlength(Res, Nlen, T).
   rlength(Res, Len, []) :- Res = Len, !.
   length(Res, List) :- rlength(Res, 0, List), !.
 
-  rsum(Res, Sum, [H | T]) :- Nsum = Sum + H, rsum(Res, Nsum, T), !.
+  rsum(Res, Sum, [H | T]) :- Nsum = Sum + H, !, rsum(Res, Nsum, T).
   rsum(Res, Sum, []) :- Res = Sum, !.
   sum(Res, List) :- rsum(Res, 0, List), !.
 
-  roddsum(Res, Sum, [_, H | T]) :- Nsum = Sum + H, roddsum(Res, Nsum, T), !.
+  roddsum(Res, Sum, [_, H | T]) :- Nsum = Sum + H, !, roddsum(Res, Nsum, T).
   roddsum(Res, Sum, []) :- Res = Sum, !.
   oddsum(Res, List) :- roddsum(Res, 0, List), !.
 

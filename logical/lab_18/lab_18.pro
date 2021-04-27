@@ -13,9 +13,9 @@ clauses
   rfact(_, Res, Acc) :- Res = Acc, !.
   fact(N, Res) :- rfact(N, Res, 1), !.
 
-  rfib(N, A, B, Res) :- N > 1, !, Na = B, Nb = B + A, Nn = N - 1, rfib(Nn, Na, Nb, Res).
+  rfib(N, A, B, Res) :- N > 2, !, Na = B, Nb = B + A, Nn = N - 1, rfib(Nn, Na, Nb, Res).
   rfib(_, _, B, Res) :- Res = B, !.
-  fib(N, Res) :- Nn = N - 1, rfib(Nn, 1, 1, Res), !.
+  fib(N, Res) :- rfib(N, 1, 1, Res), !.
 
 goal
   %fact(3, Res).
