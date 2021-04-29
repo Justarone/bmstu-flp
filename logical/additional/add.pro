@@ -62,7 +62,7 @@ clauses
   bank_depositor("Romanov", "Sper", 238, 10).
   bank_depositor("Perestoronin", "Maze", 1, 10000).
 
-  not_exist(H, [H | _]) :- !, 1 = 2.
+  not_exist(H, [H | _]) :- !, fail.
   not_exist(Prop, [_ | T]) :- not_exist(Prop, T).
   not_exist(_, []).
 
